@@ -49,17 +49,11 @@ public class MovieTheatreService {
     }
 
     public LocalTime findLatestShow(String title) {
-        LocalTime latestShow = null;
-        for (List<Movie> movies : shows.values()) {
-            for (Movie movie : movies) {
-                if (movie.getTitle().equals(title) && (latestShow == null || movie.getStartTime().isAfter(latestShow))) {
-                    latestShow = movie.getStartTime();
-                }
-            }
-        }
-        if (latestShow == null) {
-            throw new IllegalArgumentException("Movie not found");
-        }
-        return latestShow;
+        return shows.values().stream()
+                .flatMap(List::stream)
+                .filter(movie -> movie.getTitle().equals(title))
+                .max(Comparator.comparing(Movie::getStartTime))
+                .orElseThrow(() -> new IllegalArgumentException("Movie not found"))
+                .getStartTime();
     }
 }
