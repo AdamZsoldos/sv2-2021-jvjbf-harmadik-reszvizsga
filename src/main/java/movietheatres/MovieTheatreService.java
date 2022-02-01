@@ -26,11 +26,10 @@ public class MovieTheatreService {
     }
 
     private void parseLine(String line) {
-        String[] fields = line.split("-");
+        String[] fields = line.split("[-;]");
         String theater = fields[0];
-        fields = fields[1].split(";");
-        String title = fields[0];
-        LocalTime startTime = LocalTime.parse(fields[1]);
+        String title = fields[1];
+        LocalTime startTime = LocalTime.parse(fields[2]);
         addShow(theater, title, startTime);
     }
 
